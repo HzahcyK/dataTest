@@ -47,7 +47,8 @@ def read_count(dp, start_time, end_time):
     return r
 
 def main():
-    result = caibian_read_count('2020-01-01 00:00:00', '2020-01-10 00:00:00')
+    dp =input("请输入部门：")
+    result = caibian_read_count(dp, '2020-01-01 00:00:00', '2020-01-10 00:00:00')
     print(result)
 if __name__ == '__main__':
     main()
