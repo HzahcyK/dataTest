@@ -40,7 +40,7 @@ def read_count(dp, start_time, end_time):
     start_time = start_time
     end_time = end_time
     department = dp
-    sql = "select sum(read_count) from views_article where editor like'%%s%%' and (pub_date between %s and %s);" % (department, start_time, end_time)
+    sql = "select sum(read_count) from views_article where editor like'%%%s%%' and (pub_date between %s and %s);" % (department, start_time, end_time)
     params.append(start_time)
     params.append(end_time)
     r = db.get_all(sql)
