@@ -56,12 +56,10 @@ def county_read_count(county, strat_time, end_time):
 
 def main():
     dp =input("请输入部门：")
-    if "县" in dp:
-        result = tai_read_count(dp, '2020-01-01 00:00:00', '2020-01-10 00:00:00')
-        print(result)
-    else:
-        result = county_read_count(dp, '2020-01-01 00:00:00', '2020-01-10 00:00:00')
-        print(result)
+    # result = tai_read_count(dp, '2020-01-01 00:00:00', '2020-01-10 00:00:00')
+    # print(result)
+    result = county_read_count(dp, '2020-01-01 00:00:00', '2020-01-10 00:00:00')
+    print(result)
 if __name__ == '__main__':
     main()
 
