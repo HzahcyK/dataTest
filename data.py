@@ -39,8 +39,8 @@ def tai_read_count(dp, start_time, end_time):
     params = []
     start_time = start_time
     end_time = end_time
-    department = dp
-    sql = "select sum(read_count) from views_article where editor like'%%%s%%' and (pub_date between '%s' and '%s');" % (department, start_time, end_time)
+    dp = dp
+    sql = "select sum(read_count) from views_article where editor like'%%%s%%' and (pub_date between '%s' and '%s');" % (dp, start_time, end_time)
     params.append(start_time)
     params.append(end_time)
     r = db.get_all(sql)
@@ -54,11 +54,31 @@ def county_read_count(county, start_time, end_time):
     r = db.get_all(sql)
     return r
 
+def app_read_count(item, start_time, end_time):
+    db = Database(host="10.10.10.240", port=5432, user="root", password="tF!e5UN?iGMRkB7Z80Ln#O@uCsP^mS", db="dj_analytics")
+    start_time = start_time
+    end_time = end_time
+    item = item
+    sql = "select sum(read_count) from views_article where category='%s' and (pub_date between '%s' and '%s');" % (item, start_time, end_time)
+    r = db.get_all(sql)
+    return r
+
+def read_count(part_tag, start_time, end_time, *args):
+    db = Database(host="10.10.10.240", port=5432, user="root", password="tF!e5UN?iGMRkB7Z80Ln#O@uCsP^mS", db="dj_analytics")
+    start_time = start_time
+    end_time = end_time
+    part_tag = part_tag
+    switcher = {
+        1: tai_read_count(dp, start_time, end_time),
+        2: county_read_count(county, start_time, end_time),
+        3: app_read_count(item, start_time, end_time),
+    }
+    result = switcher.get(part_tag)()
+
 def main():
-    dp =input("请输入部门：")
-    # result = tai_read_count(dp, '2020-01-01 00:00:00', '2020-01-10 00:00:00')
-    # print(result)
-    result = county_read_count(dp, '2020-01-01 00:00:00', '2020-01-10 00:00:00')
+    part_tag = input("请输入标签：")
+    demo = input("请输入模块：")
+    result = read_count(part_tag, '2020-01-01 00:00:00', '2020-01-10 00:00:00', demo)
     print(result)
 if __name__ == '__main__':
     main()
