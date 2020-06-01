@@ -31,7 +31,7 @@ def caibian_read_count(start_time, end_time):
     start_time = start_time
     end_time = end_time
     sql1 = """
-    select decorated_read from view_article where find_in_set("采编部", editor) and (pub_date between %s and %s);
+    select sum(read_count) from views_article where editor like "%采编部%" and (pub_date between %s and %s);
     """
     params.append(start_time)
     params.append(end_time)
