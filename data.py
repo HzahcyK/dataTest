@@ -45,9 +45,9 @@ def tai_read_count(dp, start_time, end_time):
     params.append(end_time)
     r = db.get_all(sql)
     return r
-def county_read_count(county, strat_time, end_time):
+def county_read_count(county, start_time, end_time):
     db = Database(host="10.10.10.240", port=5432, user="root", password="tF!e5UN?iGMRkB7Z80Ln#O@uCsP^mS", db="dj_analytics")
-    strat_time = strat_time
+    start_time = start_time
     end_time = end_time
     county = county
     sql = "select sum(read_count) from views_article where region='%%%s%%' and (pub_date between '%s' and '%s');" % (county, start_time, end_time)
