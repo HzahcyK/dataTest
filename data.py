@@ -3,18 +3,27 @@ import pymysql
 from django.http import JsonResponse
 
 class Database():
-    def __init__(self, host, port, user, password, db):
-        self.conn = pymysql.connect(host=host, port=port, user=user, password=password, db=db)
+    def __init__(self, host, port, user, password, db, charset="utf8"):
+        self.host = host
+        self.port = port
+        self.user = user
+        self.password = password
+        self.db = db
+        self.charset = charset
+    def connect(self):
+        self.conn = pymysql.connect(host=self.host, port=self.port, user=self.user, password=self.password, db=self.db, charset=self.charset)
         self.cursor = self.conn.cursor()
-
     def get_all(self, sql, *args):
         try:
-            self.cursor.execute(sql, args)
+            self.connect()
+            self.cursor.execute(sql)
             result = self.cursor.fetchall()
+            return result
+        except Exception as e:
+            print(e)
         finally:
             self.cursor.close()
             self.conn.close()
-        return result
 
     def get_one(self, sql):
         try:
@@ -30,12 +39,10 @@ def caibian_read_count(start_time, end_time):
     params = []
     start_time = start_time
     end_time = end_time
-    sql1 = """
-    select sum(read_count) from views_article where editor like "%采编部%" and (pub_date between %s and %s);
-    """
+    sql1 = "select sum(read_count) from views_article where editor like "%采编部%" and (pub_date between %s and %s);" %(start_time, end_time)
     params.append(start_time)
     params.append(end_time)
-    r1 = db.get_all(sql1, params[0], params[1])
+    r1 = db.get_all(sql1)
     return r1
 
 def main():
