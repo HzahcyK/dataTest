@@ -34,7 +34,7 @@ class Database():
             self.cursor.close()
             self.conn.close()
         return result
-def tai_read_count(dp, start_time, end_time):
+def tai_read_count(start_time, end_time, dp):
     db = Database(host="10.10.10.240", port=5432, user="root", password="tF!e5UN?iGMRkB7Z80Ln#O@uCsP^mS", db="dj_analytics")
     params = []
     start_time = start_time
@@ -45,7 +45,7 @@ def tai_read_count(dp, start_time, end_time):
     params.append(end_time)
     r = db.get_all(sql)
     return r
-def county_read_count(county, start_time, end_time):
+def county_read_count(start_time, end_time, county):
     db = Database(host="10.10.10.240", port=5432, user="root", password="tF!e5UN?iGMRkB7Z80Ln#O@uCsP^mS", db="dj_analytics")
     start_time = start_time
     end_time = end_time
@@ -54,7 +54,7 @@ def county_read_count(county, start_time, end_time):
     r = db.get_all(sql)
     return r
 
-def app_read_count(item, start_time, end_time):
+def app_read_count(start_time, end_time, item):
     db = Database(host="10.10.10.240", port=5432, user="root", password="tF!e5UN?iGMRkB7Z80Ln#O@uCsP^mS", db="dj_analytics")
     start_time = start_time
     end_time = end_time
@@ -69,9 +69,9 @@ def read_count(part_tag, start_time, end_time, *args):
     end_time = end_time
     part_tag = part_tag
     switcher = {
-        1: tai_read_count(dp, start_time, end_time),
-        2: county_read_count(county, start_time, end_time),
-        3: app_read_count(item, start_time, end_time),
+        1: tai_read_count(start_time, end_time, dp=args),
+        2: county_read_count(start_time, end_time, county=args),
+        3: app_read_count(start_time, end_time, itme=args),
     }
     result = switcher.get(part_tag)()
 
