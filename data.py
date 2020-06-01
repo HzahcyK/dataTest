@@ -34,22 +34,34 @@ class Database():
             self.cursor.close()
             self.conn.close()
         return result
-def read_count(dp, start_time, end_time):
+def tai_read_count(dp, start_time, end_time):
     db = Database(host="10.10.10.240", port=5432, user="root", password="tF!e5UN?iGMRkB7Z80Ln#O@uCsP^mS", db="dj_analytics")
     params = []
     start_time = start_time
     end_time = end_time
     department = dp
-    sql = "select sum(read_count) from views_article where editor like'%%%s%%' and (pub_date between %s and %s);" % (department, start_time, end_time)
+    sql = "select sum(read_count) from views_article where editor like'%%%s%%' and (pub_date between '%s' and '%s');" % (department, start_time, end_time)
     params.append(start_time)
     params.append(end_time)
+    r = db.get_all(sql)
+    return r
+def county_read_count(county, strat_time, end_time):
+    db = Database(host="10.10.10.240", port=5432, user="root", password="tF!e5UN?iGMRkB7Z80Ln#O@uCsP^mS", db="dj_analytics")
+    strat_time = strat_time
+    end_time = end_time
+    county = county
+    sql = "select sum(read_count) from views_article where region='%%%s%%' and (pub_date between '%s' and '%s');" % (county, start_time, end_time)
     r = db.get_all(sql)
     return r
 
 def main():
     dp =input("请输入部门：")
-    result = read_count(dp, '2020-01-01 00:00:00', '2020-01-10 00:00:00')
-    print(result)
+    if "县" in dp:
+        result = tai_read_count(dp, '2020-01-01 00:00:00', '2020-01-10 00:00:00')
+        print(result)
+    else:
+        result = county_read_count(dp, '2020-01-01 00:00:00', '2020-01-10 00:00:00')
+        print(result)
 if __name__ == '__main__':
     main()
 
